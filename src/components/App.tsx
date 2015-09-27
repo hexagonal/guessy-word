@@ -103,9 +103,9 @@ class LetterButton extends React.Component<LetterButtonProps,{}>
     let className: string = classes.join(" ");
 
     return (
-      <div className={className} onClick={this._onClick}>
+      <button className={className} onClick={this._onClick}>
         {this.props.letter}
-      </div>
+      </button>
     );
   }
 

@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "output",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "jsx": "react"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "./**/*.tsx",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./src/actions/AppActions.ts",
+        "./src/common.ts",
+        "./src/dispatcher/AppDispatcher.ts",
+        "./src/stores/AppStore.ts",
+        "./typings/flux/flux.d.ts",
+        "./typings/node/node.d.ts",
+        "./typings/react/react.d.ts",
+        "./typings/tsd.d.ts",
+        "./src/Main.tsx",
+        "./src/components/App.tsx"
+    ]
+}

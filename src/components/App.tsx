@@ -3,7 +3,7 @@
 import * as React from "react"
 import AppStore from "../stores/AppStore";
 import {AppState, AppStateHelp} from "../stores/AppStore";
-import {GuessLetterAction} from "../actions/AppActions";
+import ActionCreator from "../actions/AppActions";
 
 interface AppStoreProps
 {
@@ -21,6 +21,7 @@ export class App extends React.Component<{},AppState>
   componentDidMount()
   {
     AppStore.addChangeListener(this._onChange);
+    ActionCreator.loadNextPuzzle();
   }
 
   componentWillUnmount()
@@ -47,7 +48,7 @@ class WordPanel extends React.Component<AppStoreProps,{}>
     let help = new AppStateHelp(this.props.state);
 
     return (
-      <div className="word">{help.word}</div>
+      <div className="word">{this.props.state.word}</div>
     );
   }
 }
@@ -109,5 +110,5 @@ class LetterButton extends React.Component<LetterButtonProps,{}>
     );
   }
 
-  private _onClick = () => { new GuessLetterAction(this.props.letter); }
+  private _onClick = () => { ActionCreator.guessLetter(this.props.letter); }
 }

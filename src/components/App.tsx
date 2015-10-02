@@ -35,20 +35,9 @@ export class App extends React.Component<{},AppState>
     return (
       <div>
       <Title title="Guessy Word" />
-      <WordPanel state={this.state} />
+      <Puzzle state={this.state} />
       <AlphabetPanel state={this.state} />
       </div>
-    );
-  }
-}
-
-class WordPanel extends React.Component<AppStoreProps,{}>
-{
-  render() {
-    let help = new AppStateHelp(this.props.state);
-
-    return (
-      <div className="word">{this.props.state.word}</div>
     );
   }
 }
@@ -60,9 +49,31 @@ interface TitleProps
 
 class Title extends React.Component<TitleProps,{}>
 {
+  render() { return <div className="title">{this.props.title}</div>; }
+}
+
+class Puzzle extends React.Component<AppStoreProps,{}>
+{
   render() {
-    return <div className="title">{this.props.title}</div>;
+    let help = new AppStateHelp(this.props.state);
+    let puzzle: string[] = help.puzzle;
+    let puzzleLetters: JSX.Element[] =
+      puzzle.map((letter, i) =>
+        <PuzzleLetter key={i} letter={letter} />
+      );
+
+    return <div className="puzzle">{puzzleLetters}</div>;
   }
+}
+
+interface PuzzleLetterProps extends React.Props<{}>
+{
+  letter: string
+}
+
+class PuzzleLetter extends React.Component<PuzzleLetterProps,{}>
+{
+  render() { return <div className="letter">{this.props.letter}</div>; }
 }
 
 class AlphabetPanel extends React.Component<AppStoreProps,{}>
@@ -75,9 +86,11 @@ class AlphabetPanel extends React.Component<AppStoreProps,{}>
   }
 
   render() {
-    let letterButtons =
-      this.alphabet.map((letter) =>
-      <LetterButton key={letter} letter={letter} state={this.props.state} />);
+    let letterButtons: JSX.Element[] =
+      this.alphabet.map((letter, i) =>
+        <LetterButton key={i} letter={letter} state={this.props.state} />
+      );
+
     return <div className="alphabetPanel">{letterButtons}</div>;
   }
 }

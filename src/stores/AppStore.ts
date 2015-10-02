@@ -19,11 +19,22 @@ export class AppStateHelp
 	constructor(private state: AppState) {}
 
 	isCorrectGuess(letter: string): boolean {
-		return this.state.correctGuesses.some((x) => x === letter)
+		return this.state.correctGuesses.some(x => x === letter)
 	}
 
 	isIncorrectGuess(letter: string): boolean {
-		return this.state.incorrectGuesses.some((x) => x === letter)
+		return this.state.incorrectGuesses.some(x => x === letter)
+	}
+
+	get puzzle(): string[] {
+		let letters: string[] = this.state.word.split('');
+
+		let puzzle: string[] =
+			letters.map(letter =>
+				this.isCorrectGuess(letter) ? letter : '_'
+			);
+
+		return puzzle;
 	}
 }
 
@@ -32,7 +43,7 @@ class AppStore
   private _ee: EventEmitter = new EventEmitter;
 
 	private _state: AppState = {
-		word: 'nostril',
+		word: '',
 		correctGuesses: Immutable.Set<string>(),
 		incorrectGuesses: Immutable.Set<string>()
 	};

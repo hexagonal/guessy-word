@@ -6,14 +6,14 @@ export class GuessLetterAction implements AppAction
 	constructor(public letter: string) {}
 }
 
-export class LoadNextPuzzleAction implements AppAction
+export class NewGameAction implements AppAction
 {
 	constructor(public word: string) {}
 }
 
 class ActionCreator
 {
-	loadNextPuzzle() {
+	newGame() {
 		let wordsJson: string = localStorage.getItem('words');
 		let words: string [] = wordsJson ?	JSON.parse(wordsJson) : [];
 
@@ -31,7 +31,7 @@ class ActionCreator
 					let unshuffledWords: string[] = xhr.responseText.split(/\r?\n/);
 					let words: string[] = shuffle(unshuffledWords);
 					writeLocalWords(words);
-					this.loadNextPuzzle();
+					this.newGame();
 				} else {
 					console.log('Puzzle file not found.')
 				}
@@ -44,7 +44,7 @@ class ActionCreator
 		let word: string = words.pop();
 		writeLocalWords(words);
 
-		AppDispatcher.dispatch(new LoadNextPuzzleAction(word));
+		AppDispatcher.dispatch(new NewGameAction(word));
 	}
 
 	guessLetter(letter: string) {

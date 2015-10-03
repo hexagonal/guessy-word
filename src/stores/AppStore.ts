@@ -5,7 +5,7 @@ import {EventEmitter} from "events";
 import * as Immutable from "immutable";
 import AppDispatcher from "../dispatcher/AppDispatcher";
 import {AppAction} from "../common";
-import {GuessLetterAction, LoadNextPuzzleAction} from "../actions/AppActions";
+import {GuessLetterAction, NewGameAction} from "../actions/AppActions";
 
 export interface AppState
 {
@@ -53,15 +53,15 @@ class AppStore
   constructor() {
     AppDispatcher.register((action: AppAction) => {
 
-			if (action instanceof LoadNextPuzzleAction) {
-				this.loadNextPuzzle(action.word);
+			if (action instanceof NewGameAction) {
+				this.newGame(action.word);
 			} else if (action instanceof GuessLetterAction) {
 				this.guessLetter(action.letter);
       }
     });
   }
 
-	loadNextPuzzle(word: string)
+	newGame(word: string)
 	{
 		this._state = {
 			word: word,

@@ -21,7 +21,7 @@ export class App extends React.Component<{},AppState>
   componentDidMount()
   {
     AppStore.addChangeListener(this._onChange);
-    ActionCreator.loadNextPuzzle();
+    ActionCreator.newGame();
   }
 
   componentWillUnmount()
@@ -34,9 +34,16 @@ export class App extends React.Component<{},AppState>
   render() {
     return (
       <div>
-      <Title title="Guessy Word" />
-      <Puzzle state={this.state} />
-      <AlphabetPanel state={this.state} />
+      <header>
+        <Title title="Guessy Word" />
+      </header>
+      <main>
+        <Puzzle state={this.state} />
+        <AlphabetPanel state={this.state} />
+      </main>
+      <footer>
+        <NewGameButton />
+      </footer>
       </div>
     );
   }
@@ -49,7 +56,7 @@ interface TitleProps
 
 class Title extends React.Component<TitleProps,{}>
 {
-  render() { return <div className="title">{this.props.title}</div>; }
+  render() { return <h1 className="title">{this.props.title}</h1>; }
 }
 
 class Puzzle extends React.Component<AppStoreProps,{}>
@@ -124,4 +131,15 @@ class LetterButton extends React.Component<LetterButtonProps,{}>
   }
 
   private _onClick = () => { ActionCreator.guessLetter(this.props.letter); }
+}
+
+class NewGameButton extends React.Component<{},{}>
+{
+  render() {
+    return (
+      <button className="newGame" onClick={this._onClick}>+</button>
+    );
+  }
+
+  private _onClick = () => { ActionCreator.newGame(); }
 }

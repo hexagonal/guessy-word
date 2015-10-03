@@ -4,4 +4,4 @@ import * as React from "react";
 import AppStore from "./stores/AppStore";
 import {App} from "./components/App";
 
-React.render(<App />, document.getElementById('main'));
+React.render(<App />, document.getElementById('app'));

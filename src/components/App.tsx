@@ -80,7 +80,20 @@ interface PuzzleLetterProps extends React.Props<{}>
 
 class PuzzleLetter extends React.Component<PuzzleLetterProps,{}>
 {
-  render() { return <div className="letter">{this.props.letter}</div>; }
+  render() {
+    let letter: string = this.props.letter;
+    let classes: string[] = [];
+    classes.push("letter");
+
+    if (letter) { classes.push("revealed"); }
+    let className: string = classes.join(" ");
+
+    return (
+      <div className={className}>
+        {letter ? letter : "_"}
+      </div>
+    );
+  }
 }
 
 class AlphabetPanel extends React.Component<AppStoreProps,{}>

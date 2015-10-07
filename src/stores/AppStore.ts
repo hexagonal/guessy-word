@@ -31,7 +31,7 @@ export class AppStateHelp
 
     let puzzle: string[] =
       letters.map(letter =>
-        this.isCorrectGuess(letter) ? letter : '_'
+        this.isCorrectGuess(letter) ? letter : null
       );
 
     return puzzle;

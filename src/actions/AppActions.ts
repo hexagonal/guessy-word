@@ -1,3 +1,5 @@
+/// <reference path="../../typings/es6-promise/es6-promise.d.ts"/>
+
 import {AppAction} from "../common";
 import AppDispatcher from "../dispatcher/AppDispatcher";
 
@@ -14,43 +16,46 @@ export class NewGameAction implements AppAction
 class ActionCreator
 {
   newGame() {
-    let wordsJson: string = localStorage.getItem('words');
-    let words: string [] = wordsJson ?  JSON.parse(wordsJson) : [];
+    let useNextWord = (words: string[]) => {
+      let word: string = words.pop();
+      writeLocalWords(words);
+      AppDispatcher.dispatch(new NewGameAction(word));
+    };
 
-    if (words.length !== 0){
-      console.log('Local storage found.');
+    let words: string[] = loadLocalWords();
+
+    if (words.length !== 0) {
+      useNextWord(words);
     } else {
-      console.log('Local storage not found. Downloading puzzle file...');
-
-      // Download word list and then retry
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', encodeURI('words.txt'));
-
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          let unshuffledWords: string[] = xhr.responseText.split(/\r?\n/);
-          let words: string[] = shuffle(unshuffledWords);
-          writeLocalWords(words);
-          this.newGame();
-        } else {
-          console.log('Puzzle file not found.')
-        }
-      };
-
-      xhr.send();
-      return;
+      ajaxGetText(encodeURI('words.txt'))
+        .then(wordList => wordList.split(/\r?\n/))
+        .then(shuffle)
+        .then(useNextWord)
+        .catch(error => console.log("newGame error: " + error));
     }
-
-    let word: string = words.pop();
-    writeLocalWords(words);
-
-    AppDispatcher.dispatch(new NewGameAction(word));
   }
 
   guessLetter(letter: string) {
     AppDispatcher.dispatch(new GuessLetterAction(letter));
   }
 } // end ActionCreator
+
+function ajaxGetText(url: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    let xhr: XMLHttpRequest = new XMLHttpRequest();
+    xhr.open('GET', url);
+
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        resolve(xhr.responseText);
+      } else {
+        reject(xhr.statusText);
+      }
+    };
+
+    xhr.send();
+  });
+}
 
 function loadLocalWords(): string[] {
   let wordsJson: string = localStorage.getItem('words');

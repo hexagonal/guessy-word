@@ -9,22 +9,18 @@
         "sourceMap": true,
         "jsx": "react"
     },
-    "filesGlob": [
-        "./**/*.ts",
-        "./**/*.tsx",
-        "!./node_modules/**/*.ts"
-    ],
     "files": [
+        "./node_modules/immutable/dist/immutable.d.ts",
         "./src/actions/AppActions.ts",
         "./src/common.ts",
+        "./src/components/App.tsx",
         "./src/dispatcher/AppDispatcher.ts",
+        "./src/Main.tsx",
         "./src/stores/AppStore.ts",
         "./typings/es6-promise/es6-promise.d.ts",
         "./typings/flux/flux.d.ts",
         "./typings/node/node.d.ts",
         "./typings/react/react.d.ts",
-        "./typings/tsd.d.ts",
-        "./src/Main.tsx",
-        "./src/components/App.tsx"
+        "./typings/tsd.d.ts"
     ]
 }

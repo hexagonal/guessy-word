@@ -18,11 +18,11 @@ class ActionCreator
   newGame() {
     let useNextWord = (words: string[]) => {
       let word: string = words.pop();
-      writeLocalWords(words);
+      saveWords(words);
       AppDispatcher.dispatch(new NewGameAction(word));
     };
 
-    let words: string[] = loadLocalWords();
+    let words: string[] = loadWords();
 
     if (words.length !== 0) {
       useNextWord(words);
@@ -57,19 +57,35 @@ function ajaxGetText(url: string): Promise<string> {
   });
 }
 
-function loadLocalWords(): string[] {
-  let wordsJson: string = localStorage.getItem('words');
-  return wordsJson ? JSON.parse(wordsJson) : [];
+function loadWords(): string[] {
+  let words: string[] = readFromLocalStorage('words');
+  return (words !== null) ? words : [];
 }
 
-function writeLocalWords(words: string[]) {
-  let wordsJson: string = JSON.stringify(words);
-  localStorage.setItem('words', wordsJson);
+function saveWords(words: string[]) {
+  writeToLocalStorage('words', words);
 }
 
-// Shuffles an array
-// Implementation taken from: stackoverflow.com/questions/962802
+function readFromLocalStorage(key: string): any {
+  let json: string = localStorage.getItem(key);
+  return json ? JSON.parse(json) : null;
+}
+
+function writeToLocalStorage(key: string, value: any) {
+  let json: string = JSON.stringify(value);
+  localStorage.setItem(key, json);
+}
+
+// A pure shuffle: returns a shuffled copy of an array
 function shuffle<T>(arr: T[]): T[] {
+	let arr2: T[] = arr.slice(); // i.e. copy
+	impureShuffle(arr2);
+	return arr2;
+}
+
+// An efficient but impure shuffle: shuffles an array
+// Implementation taken from: stackoverflow.com/questions/962802
+function impureShuffle<T>(arr: T[]): void {
     let top: number = arr.length;
 
     if(top) while(--top) {
@@ -78,18 +94,6 @@ function shuffle<T>(arr: T[]): T[] {
       arr[current] = arr[top];
       arr[top] = item;
     }
-
-    return arr;
-}
-
-// Returns a random item from an array
-function getRandomItem<T>(arr: T[]): T {
-  return arr[getRandomInt(0, arr.length)];
-}
-
-// Returns a random integer between min (included) and max (excluded)
-function getRandomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 export default new ActionCreator;
